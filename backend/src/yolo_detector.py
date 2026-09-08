@@ -13,7 +13,7 @@ from .schemas import DamageType, ImageInput, ViewType, YoloDetection
 YOLO_MODEL_NAME = "revalue_exterior_yolo11n_v0.2"
 DEFAULT_MODEL_PATH = Path(__file__).resolve().parents[1] / "models" / "revalue_exterior_yolo11n_v0.2.pt"
 ULTRALYTICS_CONFIG_DIR = Path(__file__).resolve().parents[2] / "Ultralytics"
-DEFAULT_IMGSZ = 640
+DEFAULT_IMGSZ = 512
 DEFAULT_CONF = 0.25
 RAW_CLASS_NAMES = {
     0: "generic_crack",
