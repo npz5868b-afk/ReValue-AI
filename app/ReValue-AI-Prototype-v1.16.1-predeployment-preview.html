@@ -726,6 +726,167 @@
     @keyframes scannerRingPulse{0%,100%{transform:scale(.95);opacity:.38}50%{transform:scale(1.02);opacity:.68}}
     @keyframes captureBayPulse{0%,100%{opacity:.44;filter:saturate(1)}50%{opacity:.72;filter:saturate(1.12)}}
     @keyframes pulse{50%{filter:drop-shadow(0 0 9px rgba(22,217,197,.42));transform:scale(1.01)}}
+
+    /* Frontend performance preservation layer: same premium look, cheaper motion. */
+    body:before,
+    body:after,
+    .app:before,
+    .app:after,
+    .card.tech:after,
+    .shop-card:after,
+    .report-share-card:after,
+    .primary:before,
+    .scanline{
+      backface-visibility:hidden;
+      transform:translateZ(0);
+      will-change:transform,opacity;
+    }
+    body:before{
+      animation:revalueStarDrift 54s linear infinite!important;
+      filter:none!important;
+      opacity:.7;
+    }
+    body:after{
+      animation:revalueNebulaFloat 38s ease-in-out infinite alternate!important;
+      filter:none!important;
+      opacity:.54;
+    }
+    .app:before{
+      animation:revalueAuroraFloat 42s ease-in-out infinite alternate!important;
+      filter:none!important;
+      opacity:.48;
+    }
+    .app:after{
+      animation:revalueAtmosphereSweep 32s ease-in-out infinite alternate!important;
+      background-position:50% 50%,0 0!important;
+      opacity:.28;
+    }
+    .card.tech:before{
+      animation:revaluePanelBreath 28s ease-in-out infinite!important;
+      background-position:0 0!important;
+      will-change:opacity;
+    }
+    .energy-bar,.progress,.bar{
+      contain:paint;
+      overflow:hidden;
+    }
+    .energy-bar i,.progress i,.bar i{
+      position:relative;
+      overflow:hidden;
+      background-size:100% 100%!important;
+      animation:revalueEnergyBreathe 8.8s ease-in-out infinite!important;
+      filter:none!important;
+      will-change:opacity;
+    }
+    .energy-bar i:after,.progress i:after,.bar i:after{
+      content:"";
+      position:absolute;
+      inset:0;
+      width:46%;
+      border-radius:inherit;
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,.34),rgba(184,255,122,.2),transparent);
+      transform:translate3d(-145%,0,0);
+      animation:revalueEnergySweep 9.6s cubic-bezier(.42,0,.18,1) infinite;
+      pointer-events:none;
+      will-change:transform,opacity;
+    }
+    .energy-bar.processing i:after{
+      animation-duration:8.4s;
+    }
+    .progress i:after{
+      animation-duration:10.2s;
+    }
+    .bar i:after{
+      animation-duration:10.8s;
+    }
+    .scanner.scanning .scanline{
+      top:12%!important;
+      animation:revalueScanlineDrift 7.8s cubic-bezier(.45,0,.2,1) infinite alternate!important;
+    }
+    .scanner.scanning .phone-shell{
+      animation:revaluePhoneBreathe 7.4s ease-in-out infinite!important;
+    }
+    .diag-meter,.grade-ring{
+      animation:revalueMeterBreathe 8.2s ease-in-out infinite!important;
+    }
+    .mark{
+      animation:revalueMarkBreathe 8.4s ease-in-out infinite!important;
+    }
+    .scanner.final-scanner:before{
+      animation:revalueCaptureBreathe 8.8s ease-in-out infinite!important;
+    }
+    .screen:not(.active) *,
+    .screen:not(.active):before,
+    .screen:not(.active):after{
+      animation-play-state:paused!important;
+      transition:none!important;
+    }
+    .topbar,.bottom-nav,.chat-head,.composer{
+      backdrop-filter:blur(12px) saturate(125%);
+    }
+    .card,.chat-list-panel{
+      backdrop-filter:blur(12px) saturate(125%);
+      contain:layout paint style;
+    }
+    .shop-card,.report-share-card,.match,.adtag{
+      backdrop-filter:blur(8px) saturate(118%);
+      contain:layout paint;
+    }
+    .scanner,.final-slot,.photo-slot,.remote-box,.value-box,.evidence-chip{
+      contain:layout paint;
+    }
+    img{
+      content-visibility:auto;
+    }
+    @keyframes revalueStarDrift{
+      from{transform:translate3d(-1.4%,-1%,0) scale(1);opacity:.66}
+      to{transform:translate3d(1.4%,1%,0) scale(1.015);opacity:.76}
+    }
+    @keyframes revalueNebulaFloat{
+      from{transform:translate3d(-1.2%,.4%,0) scale(1) rotate(-.6deg);opacity:.48}
+      to{transform:translate3d(1.2%,-.4%,0) scale(1.035) rotate(.8deg);opacity:.58}
+    }
+    @keyframes revalueAuroraFloat{
+      from{transform:translate3d(0,-.8%,0) scale(1) rotate(-.8deg);opacity:.42}
+      to{transform:translate3d(0,.8%,0) scale(1.03) rotate(.9deg);opacity:.52}
+    }
+    @keyframes revalueAtmosphereSweep{
+      from{transform:translate3d(-1.5%,0,0);opacity:.22}
+      to{transform:translate3d(1.5%,0,0);opacity:.31}
+    }
+    @keyframes revaluePanelBreath{
+      0%,100%{opacity:.42}
+      50%{opacity:.58}
+    }
+    @keyframes revalueEnergyBreathe{
+      0%,100%{opacity:.9}
+      50%{opacity:1}
+    }
+    @keyframes revalueEnergySweep{
+      0%,38%{transform:translate3d(-145%,0,0);opacity:0}
+      54%{opacity:.92}
+      82%,100%{transform:translate3d(240%,0,0);opacity:0}
+    }
+    @keyframes revalueScanlineDrift{
+      from{transform:translate3d(0,0,0);opacity:.72}
+      to{transform:translate3d(0,178px,0);opacity:.95}
+    }
+    @keyframes revaluePhoneBreathe{
+      0%,100%{transform:scale(1);opacity:1}
+      50%{transform:scale(1.006);opacity:.96}
+    }
+    @keyframes revalueMeterBreathe{
+      0%,100%{opacity:.96}
+      50%{opacity:1}
+    }
+    @keyframes revalueMarkBreathe{
+      0%,100%{transform:translateZ(0) scale(1)}
+      50%{transform:translateZ(0) scale(1.018)}
+    }
+    @keyframes revalueCaptureBreathe{
+      0%,100%{opacity:.44}
+      50%{opacity:.68}
+    }
   </style>
 </head>
 <body>
@@ -1134,7 +1295,7 @@ function renderLiveExterior(){document.querySelectorAll('[data-assessment]').for
 function liveViewLabel(view){return lang==='zh'?view.zh:view.en}
 function triggerPhotoSlot(view){const input=document.getElementById('photoInput-'+view);if(input)input.click()}
 function handlePhotoInput(view,input){const file=input.files&&input.files[0];if(!file)return;if(livePhotos[view]?.url)URL.revokeObjectURL(livePhotos[view].url);livePhotos[view]={name:file.name,url:URL.createObjectURL(file),type:file.type,size:file.size,source:'upload'};renderPhotoSlots()}
-function renderPhotoSlots(){const title=livePhotoSource==='self'?(lang==='zh'?'上传这台手机外观':'Upload this phone'):(lang==='zh'?'上传目标手机外观':'Upload target phone');document.getElementById('photoFlowTitle').textContent=title;document.getElementById('photoFlowHelper').textContent=lang==='zh'?'Front 和 Back 是最低要求。照片只保留在本机。':'Front and Back are required. Photos stay on this device.';document.getElementById('photoSlots').innerHTML=livePhotoViews.map(v=>{const p=livePhotos[v.id];return `<button class="photo-slot ${p?'ready':''}" type="button" onclick="triggerPhotoSlot('${v.id}')"><div class="photo-preview">${p?`<img src="${p.url}" alt="${liveViewLabel(v)} photo">`:`<span>${liveViewLabel(v)}</span>`}</div><b>${liveViewLabel(v)}${v.required?' *':''}</b><span>${p?escapeHtml(p.name):(lang==='zh'?'添加照片':'Add Photo')}</span><small>${p?(lang==='zh'?'可重新选择':'Tap to retake'):(v.required?(lang==='zh'?'必需':'Required'):(lang==='zh'?'建议':'Recommended'))}</small></button>`}).join('')}
+function renderPhotoSlots(){const title=livePhotoSource==='self'?(lang==='zh'?'上传这台手机外观':'Upload this phone'):(lang==='zh'?'上传目标手机外观':'Upload target phone');document.getElementById('photoFlowTitle').textContent=title;document.getElementById('photoFlowHelper').textContent=lang==='zh'?'Front 和 Back 是最低要求。照片只保留在本机。':'Front and Back are required. Photos stay on this device.';document.getElementById('photoSlots').innerHTML=livePhotoViews.map(v=>{const p=livePhotos[v.id];return `<button class="photo-slot ${p?'ready':''}" type="button" onclick="triggerPhotoSlot('${v.id}')"><div class="photo-preview">${p?`<img loading="lazy" decoding="async" src="${p.url}" alt="${liveViewLabel(v)} photo">`:`<span>${liveViewLabel(v)}</span>`}</div><b>${liveViewLabel(v)}${v.required?' *':''}</b><span>${p?escapeHtml(p.name):(lang==='zh'?'添加照片':'Add Photo')}</span><small>${p?(lang==='zh'?'可重新选择':'Tap to retake'):(v.required?(lang==='zh'?'必需':'Required'):(lang==='zh'?'建议':'Recommended'))}</small></button>`}).join('')}
 function missingRequiredPhotos(){return livePhotoViews.filter(v=>v.required&&!livePhotos[v.id]).map(liveViewLabel)}
 async function analyzeLivePhotos(){const missing=missingRequiredPhotos();if(missing.length){toast((lang==='zh'?'还需要照片：':'Missing photos: ')+missing.join(', '));return}liveAnalysis=await liveExteriorServices.identifyDevice(livePhotos);await liveExteriorServices.analyzeDamage(livePhotos);showLiveStep('confirm')}
 function renderDeviceConfirmation(){const body=document.getElementById('deviceConfirmBody'),picked=smartphoneCatalogue.find(x=>x.id===liveSelectedCandidate);document.getElementById('deviceConfirmTitle').textContent=picked?(lang==='zh'?'Device Detected':'Device Detected'):(lang==='zh'?'设备识别':'Device Identification');const note=liveAnalysis?.message||'Backend/API proxy required for production Gemini calls.';body.innerHTML=`<div class="info-note">${lang==='zh'?'Gemini Vision 接口已预留，但生产调用需要安全 backend/API proxy。':'Gemini Vision interface is prepared, but production calls need a secure backend/API proxy.'}</div><div class="candidate-grid">${smartphoneCatalogue.map(c=>`<button class="candidate-card ${c.id===liveSelectedCandidate?'active':''}" type="button" onclick="chooseLiveCandidate('${c.id}')"><b>${c.canonical}</b><span>${lang==='zh'?'Catalogue normalization seed':'Catalogue normalization seed'}</span><small>${c.id===liveSelectedCandidate?(lang==='zh'?'已选择':'Selected'):(lang==='zh'?'手动确认':'Manual confirm')}</small></button>`).join('')}</div><p class="helper-line">${escapeHtml(note)}</p><button class="primary" type="button" onclick="confirmLiveDevice()">${lang==='zh'?'确认设备':'Confirm Device'}</button><button class="ghost-button" type="button" onclick="openPhotoFlow(livePhotoSource||'other')">${lang==='zh'?'重新上传照片':'Change Photos'}</button>`}
@@ -1203,13 +1364,13 @@ function nowTime(){return new Date().toLocaleTimeString([],{hour:'numeric',minut
 function shortDate(ts){if(!ts)return '';const d=new Date(ts),n=new Date();if(d.toDateString()===n.toDateString())return d.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'});return d.toLocaleDateString([],{day:'2-digit',month:'2-digit'})}
 function activePageId(){return document.querySelector('.screen.active')?.id||'scanPage'}
 function lastDeviceId(c){for(let i=(c.messages||[]).length-1;i>=0;i--){if(c.messages[i].device)return c.messages[i].device}return c.device||selected}
-function renderShops(){const small=lang==='zh'?['动作','距离','联系','分享报告','Sponsored','匹配']:['Action','Distance','Contact','Share report','Sponsored','Match'];document.getElementById('shopList').innerHTML=shops.map((s,i)=>`<article class="shop-card"><div class="shop-photo"><img src="${s.image}" alt="${s.name} storefront"><div class="shop-badges"><strong class="adtag">${small[4]} #${i+1}</strong><div class="match"><strong>${s.match}</strong><small>${small[5]}</small></div></div></div><div class="shop-body"><div class="shop-top"><div><b>${s.name}</b></div></div><div class="shop-service">${s.service}</div><div class="shop-metrics"><div><strong>${s.action}</strong><small>${small[0]}</small></div><div><strong>${shopOffer(s,selected)}</strong><small>${shopQuoteLabel(s)}<span class="quote-note">${shopQuoteNote(s)}</span></small></div><div><strong>${s.distance}</strong><small>${small[1]}</small></div></div><div class="shop-actions"><button class="secondary" onclick="openChat(${i},false,false)">${small[2]}</button><button class="primary" style="margin:0;padding:11px" onclick="openChat(${i},true,false)">${small[3]}</button></div></div></article>`).join('')}
+function renderShops(){const small=lang==='zh'?['动作','距离','联系','分享报告','Sponsored','匹配']:['Action','Distance','Contact','Share report','Sponsored','Match'];document.getElementById('shopList').innerHTML=shops.map((s,i)=>`<article class="shop-card"><div class="shop-photo"><img loading="lazy" decoding="async" src="${s.image}" alt="${s.name} storefront"><div class="shop-badges"><strong class="adtag">${small[4]} #${i+1}</strong><div class="match"><strong>${s.match}</strong><small>${small[5]}</small></div></div></div><div class="shop-body"><div class="shop-top"><div><b>${s.name}</b></div></div><div class="shop-service">${s.service}</div><div class="shop-metrics"><div><strong>${s.action}</strong><small>${small[0]}</small></div><div><strong>${shopOffer(s,selected)}</strong><small>${shopQuoteLabel(s)}<span class="quote-note">${shopQuoteNote(s)}</span></small></div><div><strong>${s.distance}</strong><small>${small[1]}</small></div></div><div class="shop-actions"><button class="secondary" onclick="openChat(${i},false,false)">${small[2]}</button><button class="primary" style="margin:0;padding:11px" onclick="openChat(${i},true,false)">${small[3]}</button></div></div></article>`).join('')}
 function openChat(shopIndex,shareReport,fromList){activeShopIndex=shopIndex;chatReturnPage=fromList?'chats':'shops';ensureConversation(shopIndex);showPage('chat');if(shareReport)sendReportToShop(shopIndex)}
 function backFromChat(){showPage(chatReturnPage||'shops')}
 function addMessage(shopIndex,msg){const c=ensureConversation(shopIndex),ts=Date.now();c.device=msg.device||c.device||selected;c.updatedAt=ts;c.messages.push(Object.assign({time:nowTime(),ts},msg));saveConversations()}
 function reportCardHtml(d,time){const v=valuationData[d.valuationKey]||valuation();return `<div class="report-share-card"><div class="eyebrow">REVALUE AI REPORT</div><h3>${d.report}</h3><div class="report-grid"><div><small>Device</small><b>${d.name}</b></div><div><small>Grade</small><b>${d.grade} / ${d.internal}</b></div><div><small>Value</small><b>${formatMarketRange(v)}</b></div><div><small>Repair</small><b>${formatRepairRange(v)}</b></div></div>${time?`<span class="time">${escapeHtml(time)}</span>`:''}</div>`}
-function renderChatMessage(m){const s=shops[activeShopIndex]||shops[0];if(m.type==='report'){return `<div class="msg user">${reportCardHtml(devices[m.device]||devices[selected],m.time)}</div>`}const avatar=m.side==='shop'?`<img src="${s.image}" alt="${s.name}">`:'';return `<div class="msg ${m.side}">${avatar}<div class="bubble">${escapeHtml(m.text)}<span class="time">${escapeHtml(m.time)}</span></div></div>`}
-function typingHtml(){const s=shops[activeShopIndex]||shops[0];return `<div class="msg shop typing"><img src="${s.image}" alt="${s.name}"><div class="bubble"><span class="typing-dots"><i></i><i></i><i></i></span></div></div>`}
+function renderChatMessage(m){const s=shops[activeShopIndex]||shops[0];if(m.type==='report'){return `<div class="msg user">${reportCardHtml(devices[m.device]||devices[selected],m.time)}</div>`}const avatar=m.side==='shop'?`<img loading="lazy" decoding="async" src="${s.image}" alt="${s.name}">`:'';return `<div class="msg ${m.side}">${avatar}<div class="bubble">${escapeHtml(m.text)}<span class="time">${escapeHtml(m.time)}</span></div></div>`}
+function typingHtml(){const s=shops[activeShopIndex]||shops[0];return `<div class="msg shop typing"><img loading="lazy" decoding="async" src="${s.image}" alt="${s.name}"><div class="bubble"><span class="typing-dots"><i></i><i></i><i></i></span></div></div>`}
 function renderChat(){const s=shops[activeShopIndex]||shops[0],c=ensureConversation(activeShopIndex),thread=document.getElementById('chatThread');document.getElementById('chatAvatar').src=s.image;document.getElementById('chatShopName').textContent=s.name;document.getElementById('chatShopStatus').textContent=lang==='zh'?'在线 · 通常 1 分钟内回复':'Online · usually replies in 1 min';document.getElementById('chatInput').placeholder=lang==='zh'?'输入信息':'Type a message';document.getElementById('chatCallBtn').textContent=lang==='zh'?'电话':'Call';document.getElementById('chatSendBtn').textContent=lang==='zh'?'发送':'Send';const replies=lang==='zh'?[{key:'book',label:'预约检查'},{key:'price',label:'询问最高报价'},{key:'location',label:'发送位置'}]:[{key:'book',label:'Book inspection'},{key:'price',label:'Ask best price'},{key:'location',label:'Share location'}];document.getElementById('quickReplies').innerHTML=replies.map(x=>`<button type="button" onclick="quickReply('${x.key}')">${x.label}</button>`).join('');const msgs=c.messages||[];let html=msgs.length?`<div class="chat-day">${lang==='zh'?'今天':'Today'}</div>`:'';html+=msgs.map(renderChatMessage).join('');if(chatTypingShop===activeShopIndex)html+=typingHtml();thread.innerHTML=html;setTimeout(()=>{thread.scrollTop=thread.scrollHeight},0)}
 function quickLabel(type){const labels=lang==='zh'?{book:'预约检查',price:'询问最高报价',location:'发送位置'}:{book:'Book inspection',price:'Ask best price',location:'Share location'};return labels[type]||type}
 function quickReply(type){addMessage(activeShopIndex,{side:'user',type:'text',text:quickLabel(type),device:selected});renderChat();renderChatsList();scheduleShopReply(type)}
@@ -1218,7 +1379,7 @@ function sendReportToShop(shopIndex){addMessage(shopIndex,{side:'user',type:'rep
 function scheduleShopReply(type,text){const shopIndex=activeShopIndex,deviceId=selected;if(chatReplyTimer)clearTimeout(chatReplyTimer);chatTypingShop=shopIndex;renderChat();chatReplyTimer=setTimeout(()=>{chatReplyTimer=null;chatTypingShop=null;addMessage(shopIndex,{side:'shop',type:'text',text:shopAutoReply(type,shopIndex,deviceId,text),device:deviceId});if(activePageId()==='chatPage'&&activeShopIndex===shopIndex)renderChat();renderChatsList()},1150+shopIndex*170)}
 function shopAutoReply(type,shopIndex,deviceId,text){const s=shops[shopIndex]||shops[0],d=devices[deviceId]||devices[selected],offer=shopOffer(s,deviceId),bank=shopReplyBank[shopIndex]||shopReplyBank[0],fn=bank[type]||bank.message;return fn({s,d,offer,text})}
 function messagePreview(m){if(!m)return '';if(m.type==='report'){const d=devices[m.device]||devices[selected];return lang==='zh'?`已发送 ReValue 报告 ${d.report}`:`Shared ReValue report ${d.report}`}return m.side==='shop'?m.text:m.text}
-function renderChatsList(){const el=document.getElementById('chatList');if(!el)return;const rows=Object.keys(conversations).map(k=>conversations[k]).filter(c=>c&&c.messages&&c.messages.length).sort((a,b)=>(b.updatedAt||0)-(a.updatedAt||0));if(!rows.length){el.innerHTML=`<div class="empty-chats"><b>${lang==='zh'?'还没有聊天':'No shop chats yet'}</b><span>${lang==='zh'?'从 sponsored shops 按 Contact shop 后发信息，或按 Share report 分享报告，这里才会出现商家聊天。':'Send a message from Contact shop or share a report with a sponsored shop, then the merchant chat will appear here.'}</span><button class="secondary" type="button" onclick="showPage('shops')">${lang==='zh'?'去找商家':'Find shops'}</button></div>`;return}el.innerHTML=rows.map(c=>{const i=Number(c.shopIndex),s=shops[i]||shops[0],last=c.messages[c.messages.length-1],deviceId=lastDeviceId(c),d=devices[deviceId]||devices[selected],photo=(exteriorProfiles[deviceId]||exteriorProfiles.iphone).image;return `<button class="chat-row" type="button" onclick="openChat(${i},false,true)"><img class="chat-row-avatar" src="${s.image}" alt="${s.name}"><div class="chat-row-main"><div class="chat-row-title"><b>${s.name}</b><span>${shortDate(c.updatedAt)}</span></div><strong>${d.name}</strong><p>${escapeHtml(messagePreview(last))}</p></div><img class="chat-row-thumb" src="${photo}" alt="${d.name} report photo"></button>`}).join('')}
+function renderChatsList(){const el=document.getElementById('chatList');if(!el)return;const rows=Object.keys(conversations).map(k=>conversations[k]).filter(c=>c&&c.messages&&c.messages.length).sort((a,b)=>(b.updatedAt||0)-(a.updatedAt||0));if(!rows.length){el.innerHTML=`<div class="empty-chats"><b>${lang==='zh'?'还没有聊天':'No shop chats yet'}</b><span>${lang==='zh'?'从 sponsored shops 按 Contact shop 后发信息，或按 Share report 分享报告，这里才会出现商家聊天。':'Send a message from Contact shop or share a report with a sponsored shop, then the merchant chat will appear here.'}</span><button class="secondary" type="button" onclick="showPage('shops')">${lang==='zh'?'去找商家':'Find shops'}</button></div>`;return}el.innerHTML=rows.map(c=>{const i=Number(c.shopIndex),s=shops[i]||shops[0],last=c.messages[c.messages.length-1],deviceId=lastDeviceId(c),d=devices[deviceId]||devices[selected],photo=(exteriorProfiles[deviceId]||exteriorProfiles.iphone).image;return `<button class="chat-row" type="button" onclick="openChat(${i},false,true)"><img loading="lazy" decoding="async" class="chat-row-avatar" src="${s.image}" alt="${s.name}"><div class="chat-row-main"><div class="chat-row-title"><b>${s.name}</b><span>${shortDate(c.updatedAt)}</span></div><strong>${d.name}</strong><p>${escapeHtml(messagePreview(last))}</p></div><img loading="lazy" decoding="async" class="chat-row-thumb" src="${photo}" alt="${d.name} report photo"></button>`}).join('')}
 function toggleLang(){lang=lang==='en'?'zh':'en';document.querySelectorAll('[data-i18n]').forEach(el=>el.textContent=t(el.dataset.i18n));renderLiveExterior();renderExteriorFindings();renderDiag();updateDiagProgress();renderAssessmentGates();if(activePageId()==='chatPage')renderChat();if(activePageId()==='chatsPage')renderChatsList();toast(lang==='zh'?'已切换中文':'Switched to English')}
 function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),1700)}
 window.handleAndroidBack=()=>{const active=activePageId();if(active==='chatPage'){backFromChat();return true}if(active!=='scanPage'){showPage('scan');return true}return false};
@@ -1266,19 +1427,21 @@ window.confirmFinalStorage=async function(){if(!finalState.storage){toast('Selec
 function photoCount(){return requiredViews.filter(v=>finalState.photos[v.id]).length}
 function progressText(){if(finalState.processing)return 'Analyzing exterior condition';const n=photoCount();return n===0?'Waiting for photos':`${n} of 5 views ready`}
 function renderFinalScanner(){const n=photoCount(),pct=Math.round(n/requiredViews.length*100);document.getElementById('scanPage').innerHTML=`<section class="hero scan-hero"><div class="eyebrow">STEP 3</div><h1>Exterior Scan</h1></section><section class="card tech"><div class="card-title"><h2>Exterior condition scanner</h2><span class="step">${n}/5 VIEWS</span></div><div class="scanner final-scanner ${finalState.processing?'scanning':''}"><i class="corner c1"></i><i class="corner c2"></i><i class="corner c3"></i><i class="corner c4"></i><div class="final-slot-grid">${requiredViews.map(renderPhotoSlot).join('')}</div></div><div class="energy-bar ${finalState.processing?'processing':''}" style="--p:${pct}%"><i></i></div><div class="final-status"><span>${progressText()}</span><b>${finalState.processing?'AI':pct+'%'}</b></div>${renderRemoteBox()}<div class="final-actions"><button class="secondary" type="button" onclick="triggerNextPhoto(true)">${finalState.target==='other'?'Open Camera':'Upload Photos'}</button><button class="primary" type="button" onclick="analyzeFinalExterior()">Analyze Exterior</button></div><button class="ghost-button" type="button" onclick="goToAssessmentMode()">Choose Assessment Mode</button></section>${renderHiddenInputs()}`;syncFlowBackControls()}
-function renderPhotoSlot(v){const p=finalState.photos[v.id],detections=(finalState.analysis?.detections||[]).filter(d=>d.view===v.id||d.view===v.apiView);return `<button class="final-slot ${p?'ready':''} ${finalState.processing?'processing':''}" type="button" onclick="triggerPhoto('${v.id}')"><div class="slot-preview">${p?`<img src="${p.dataUrl}" alt="${v.label}">${detections.map(d=>bboxHtml(d,p)).join('')}`:`<span>${v.label}</span>`}</div><b>${v.label}</b><span>${p?escapeHtml(p.name):'Empty'}</span><small>${p?'Ready / Uploaded':'Add Photo'}</small></button>`}
+function renderPhotoSlot(v){const p=finalState.photos[v.id],detections=(finalState.analysis?.detections||[]).filter(d=>d.view===v.id||d.view===v.apiView);return `<button class="final-slot ${p?'ready':''} ${finalState.processing?'processing':''}" type="button" onclick="triggerPhoto('${v.id}')"><div class="slot-preview">${p?`<img loading="lazy" decoding="async" src="${p.dataUrl}" alt="${v.label}">${detections.map(d=>bboxHtml(d,p)).join('')}`:`<span>${v.label}</span>`}</div><b>${v.label}</b><span>${p?escapeHtml(p.name):'Empty'}</span><small>${p?'Ready / Uploaded':'Add Photo'}</small></button>`}
 function bboxHtml(d,p){const b=d.bounding_box_xyxy;if(!b||!p.width||!p.height)return '';const l=Math.max(0,Math.min(100,b[0]/p.width*100)),t=Math.max(0,Math.min(100,b[1]/p.height*100)),w=Math.max(1,Math.min(100,(b[2]-b[0])/p.width*100)),h=Math.max(1,Math.min(100,(b[3]-b[1])/p.height*100));const label=d.raw_class==='generic_crack'?'Crack':'Scratch';return `<i class="damage-box" style="left:${l}%;top:${t}%;width:${w}%;height:${h}%"><em class="damage-tag">${label}</em></i>`}
 function renderHiddenInputs(){return requiredViews.map(v=>`<input id="finalInput-${v.id}" type="file" accept="image/*" capture="environment" onchange="handleFinalPhoto('${v.id}',this)" hidden>`).join('')}
 window.triggerPhoto=function(id){document.getElementById('finalInput-'+id)?.click()}
 window.triggerNextPhoto=function(){const next=requiredViews.find(v=>!finalState.photos[v.id])||requiredViews[0];triggerPhoto(next.id)}
 window.handleFinalPhoto=function(id,input){const file=input.files&&input.files[0];if(!file)return;const reader=new FileReader();reader.onload=()=>{const img=new Image();img.onload=()=>{finalState.photos[id]={name:file.name,mime_type:file.type||'image/jpeg',bytes_b64:String(reader.result).split(',')[1]||'',dataUrl:String(reader.result),width:img.naturalWidth,height:img.naturalHeight,source:'local'};renderFinalScanner()};img.src=String(reader.result)};reader.readAsDataURL(file)}
 window.createRemoteSession=async function(){try{finalState.session=await api('/remote-session',{method:'POST',body:'{}'});startFinalPoll();renderFinalScanner()}catch(e){toast('Remote session unavailable')}};
-function renderRemoteBox(){if(finalState.target!=='self')return '';if(!finalState.session)return `<div class="remote-box"><b>Scan with another device</b><p class="helper-line">Open a camera page on another phone.</p><button class="secondary" type="button" onclick="createRemoteSession()">Create QR + Link</button></div>`;return `<div class="remote-box"><div class="remote-qr"><img src="${API_BASE}/remote-session/${encodeURIComponent(finalState.session.session_id)}/qr.svg" alt="Scan session QR"></div><input class="remote-link" id="remoteLink" value="${escapeHtml(finalState.session.session_url)}" readonly><div class="final-actions"><button class="secondary" type="button" onclick="copyRemoteLink()">Copy Link</button><button class="primary" type="button" onclick="shareRemoteLink()">Share Link</button></div></div>`}
+function renderRemoteBox(){if(finalState.target!=='self')return '';if(!finalState.session)return `<div class="remote-box"><b>Scan with another device</b><p class="helper-line">Open a camera page on another phone.</p><button class="secondary" type="button" onclick="createRemoteSession()">Create QR + Link</button></div>`;return `<div class="remote-box"><div class="remote-qr"><img loading="lazy" decoding="async" src="${API_BASE}/remote-session/${encodeURIComponent(finalState.session.session_id)}/qr.svg" alt="Scan session QR"></div><input class="remote-link" id="remoteLink" value="${escapeHtml(finalState.session.session_url)}" readonly><div class="final-actions"><button class="secondary" type="button" onclick="copyRemoteLink()">Copy Link</button><button class="primary" type="button" onclick="shareRemoteLink()">Share Link</button></div></div>`}
 window.copyRemoteLink=function(){const u=finalState.session?.session_url||'';navigator.clipboard?.writeText(u).then(()=>toast('Link copied')).catch(()=>toast('Copy link manually'))}
 window.shareRemoteLink=function(){const u=finalState.session?.session_url||'';if(navigator.share)navigator.share({title:'ReValue AI Exterior Scan',url:u}).catch(()=>copyRemoteLink());else copyRemoteLink()}
-function startFinalPoll(){stopFinalPoll();finalState.poll=setInterval(pollRemoteSession,1500);pollRemoteSession()}
+function startFinalPoll(){stopFinalPoll();if(document.hidden)return;finalState.poll=setInterval(pollRemoteSession,1800);pollRemoteSession()}
 function stopFinalPoll(){if(finalState.poll){clearInterval(finalState.poll);finalState.poll=null}}
-async function pollRemoteSession(){if(!finalState.session)return;try{const s=await api('/remote-session/'+encodeURIComponent(finalState.session.session_id));finalState.session=s;for(const v of requiredViews){const item=s.views&&s.views[v.id];if(item&&item.status==='complete'&&item.bytes_b64){finalState.photos[v.id]={name:item.filename||v.id+'.jpg',mime_type:item.mime_type||'image/jpeg',bytes_b64:item.bytes_b64,dataUrl:`data:${item.mime_type||'image/jpeg'};base64,${item.bytes_b64}`,width:0,height:0,source:'remote'}}}if(s.complete)stopFinalPoll();renderFinalScanner()}catch(e){}}
+function remotePhotoToken(item){const b=String(item?.bytes_b64||'');return [item?.status||'',item?.filename||'',item?.mime_type||'',b.length,b.slice(0,18),b.slice(-18)].join('|')}
+async function pollRemoteSession(){if(!finalState.session||document.hidden)return;try{const wasComplete=!!finalState.session.complete;const s=await api('/remote-session/'+encodeURIComponent(finalState.session.session_id));let changed=wasComplete!==!!s.complete;finalState.session=s;finalState.remoteTokens=finalState.remoteTokens||{};for(const v of requiredViews){const item=s.views&&s.views[v.id];if(item&&item.status==='complete'&&item.bytes_b64){const token=remotePhotoToken(item);if(finalState.remoteTokens[v.id]!==token){finalState.remoteTokens[v.id]=token;finalState.photos[v.id]={name:item.filename||v.id+'.jpg',mime_type:item.mime_type||'image/jpeg',bytes_b64:item.bytes_b64,dataUrl:`data:${item.mime_type||'image/jpeg'};base64,${item.bytes_b64}`,width:0,height:0,source:'remote'};changed=true}}}if(s.complete)stopFinalPoll();if(changed)renderFinalScanner()}catch(e){}}
+document.addEventListener('visibilitychange',()=>{if(document.hidden)stopFinalPoll();else if(finalState.session&&!finalState.session.complete)startFinalPoll()});
 window.analyzeFinalExterior=async function(){const missing=requiredViews.filter(v=>!finalState.photos[v.id]);if(missing.length){toast('Missing: '+missing.map(v=>v.label).join(', '));return}finalState.processing=true;renderFinalScanner();const images=requiredViews.map(v=>({view:v.id,filename:finalState.photos[v.id].name,mime_type:finalState.photos[v.id].mime_type,bytes_b64:finalState.photos[v.id].bytes_b64}));try{finalState.analysis=await api('/analyze-exterior',{method:'POST',body:JSON.stringify({images})});const grade=finalState.analysis?.grade?.exterior_grade;if(gradeConditionMap[grade]){finalState.valuation=await api('/live-valuation',{method:'POST',body:JSON.stringify({confirmed_device:finalState.confirmedDevice,exterior_grade:grade})})}exteriorDone=true;finalState.processing=false;renderFinalScanner();renderFinalResultCTA();}catch(e){finalState.processing=false;renderFinalScanner();toast('Analysis backend unavailable')}}
 function renderFinalResultCTA(){const grade=finalState.analysis?.grade?.exterior_grade||'pending';const damages=(finalState.analysis?.merged_damage||[]).filter(x=>x.grade_affecting).map(x=>x.damage_type.replace(/_/g,' '));document.getElementById('scanPage').insertAdjacentHTML('beforeend',`<section class="card"><div class="card-title"><h3>Exterior Grade</h3><span class="step">${escapeHtml(String(grade))}</span></div><div class="damage-chip-row">${damages.length?damages.map(d=>`<span>${d.includes('crack')?'Crack':d.includes('scratch')?'Scratch':escapeHtml(d)}</span>`).join(''):'<span>No confirmed visible damage</span>'}</div><button class="primary" type="button" onclick="showPage('internal')">Continue to Internal Check</button></section>`)}
 function marketRangeFromAssessment(a){const v=a?.valuation||{};if(v.market_value_low&&v.market_value_high)return `RM${money(v.market_value_low)}–RM${money(v.market_value_high)}`;return 'Insufficient market evidence'}
@@ -1295,7 +1458,7 @@ function shopOfferData(shopIndex,a){const s=shops[shopIndex]||shops[0];if(s.name
 function renderFinalGates(){const ready=finalState.active&&exteriorDone&&internalDone;document.querySelectorAll('.requires-report').forEach(el=>el.style.display=ready?'':'none');const report=document.getElementById('reportPending'),shopsPending=document.getElementById('shopsPending'),shopList=document.getElementById('shopList');if(report)report.style.display=ready?'none':'block';if(shopsPending)shopsPending.style.display=ready?'none':'block';if(ready){updateReport();renderShops()}else{if(report)report.innerHTML=`<div class="pending-hero"><div class="pending-icon">...</div><div class="pending-copy"><h3>Report pending</h3><p>Finish scan and diagnostics.</p></div></div>`;if(shopsPending)shopsPending.innerHTML=`<div class="pending-hero"><div class="pending-icon">AD</div><div class="pending-copy"><h3>Offers locked</h3><p>Ready after valuation.</p></div></div>`;if(shopList)shopList.innerHTML=''}}
 window.updateReport=function(){const a=syncCurrentAssessment(),v=a.valuation||{},c=a.condition||{},d=a.device||{};document.getElementById('overallGrade').textContent=c.exterior_grade||'Pending';document.getElementById('reportPhone').textContent=d.device_model||[d.brand,d.model].filter(Boolean).join(' ');document.getElementById('reportMeta').textContent=`${d.storage||''} · Exterior ${c.exterior_grade||'Pending'} · Internal ${c.internal_grade||'B+'} · Report ID ${a.report_id}`;document.getElementById('estimatedValue').textContent=marketRangeFromAssessment(a);const damageLabel=document.querySelector('#repairCost')?.previousElementSibling;if(damageLabel)damageLabel.textContent='Detected Damage';document.getElementById('repairCost').textContent=c.detected_damage||'None confirmed';document.getElementById('reportReco').textContent='Compare Store Offers';document.getElementById('evidenceStats').innerHTML=`<div class="evidence-stat"><b>${v.comparable_count||0}</b><span>Exact-Model Comparables</span></div><div class="evidence-stat"><b>${v.condition_matched_count||0}</b><span>Condition-Matched Comparables</span></div>`;const panel=document.getElementById('priceEvidencePanel');if(panel){panel.classList.toggle('open',evidenceOpen);panel.innerHTML=evidenceOpen?`<div class="evidence-section"><h4>PRICE EVIDENCE</h4><div class="evidence-grid"><div class="evidence-chip"><small>Device</small><b>${escapeHtml(d.device_model||d.model)}</b></div><div class="evidence-chip"><small>Storage</small><b>${escapeHtml(d.storage||'Confirmed by user')}</b></div><div class="evidence-chip"><small>Market Value</small><b>${marketRangeFromAssessment(a)}</b></div><div class="evidence-chip"><small>Source</small><b>${escapeHtml(v.valuation_source||'ReValue valuation')}</b></div></div></div>`:''}document.getElementById('reportId').textContent=a.report_id;document.getElementById('qrState').textContent=`${d.device_model||d.model} · ${d.storage||''} · Exterior ${c.exterior_grade||'Pending'} · Value ${marketRangeFromAssessment(a)}`;document.getElementById('barExteriorGrade').textContent=c.exterior_grade||'Pending';document.getElementById('barBatteryGrade').textContent=c.internal_grade||'B+';document.getElementById('barPerformanceGrade').textContent='A-';document.getElementById('barConnectivityGrade').textContent='A-';document.getElementById('barRiskGrade').textContent=c.risk_level||'Medium';renderQr(a.report_id)}
 function offerRangeFor(kind){return shopOfferData(kind==='tradein'?2:3,syncCurrentAssessment()).display}
-window.renderShops=function(){const a=syncCurrentAssessment();const small=['Action','Distance','Get Quote','Share report','Sponsored','Match'];document.getElementById('shopList').innerHTML=shops.map((s,i)=>{const offerData=shopOfferData(i,a),tag=s.name.includes('GreenTech')?'Best trade-in offer':s.name.includes('EcoPhone')?'Best cash offer':s.offerType==='repair'?'Best for repair':'Closest';let primary='Share report',secondary='Contact';if(s.offerType==='repair'){primary='View Shop';secondary='Get Quote'}return `<article class="shop-card"><div class="shop-photo"><img src="${s.image}" alt="${s.name} storefront"><div class="shop-badges"><strong class="adtag">${small[4]} #${i+1}</strong><div class="match"><strong>${s.match}</strong><small>${small[5]}</small></div></div></div><div class="shop-body"><div class="shop-top"><div><b>${s.name}</b></div></div><div class="shop-service">${tag}</div><div class="shop-metrics"><div><strong>${offerData.action}</strong><small>${small[0]}</small></div><div><strong class="offer-strong">${offerData.display}</strong><small>${offerData.label}<span class="quote-note">${offerData.note}</span></small></div><div><strong>${s.distance}</strong><small>${small[1]}</small></div></div><div class="shop-actions"><button class="secondary" onclick="openChat(${i},false,false)">${secondary}</button><button class="primary" style="margin:0;padding:11px" onclick="openChat(${i},true,false)">${primary}</button></div></div></article>`}).join('')}
+window.renderShops=function(){const a=syncCurrentAssessment();const small=['Action','Distance','Get Quote','Share report','Sponsored','Match'];document.getElementById('shopList').innerHTML=shops.map((s,i)=>{const offerData=shopOfferData(i,a),tag=s.name.includes('GreenTech')?'Best trade-in offer':s.name.includes('EcoPhone')?'Best cash offer':s.offerType==='repair'?'Best for repair':'Closest';let primary='Share report',secondary='Contact';if(s.offerType==='repair'){primary='View Shop';secondary='Get Quote'}return `<article class="shop-card"><div class="shop-photo"><img loading="lazy" decoding="async" src="${s.image}" alt="${s.name} storefront"><div class="shop-badges"><strong class="adtag">${small[4]} #${i+1}</strong><div class="match"><strong>${s.match}</strong><small>${small[5]}</small></div></div></div><div class="shop-body"><div class="shop-top"><div><b>${s.name}</b></div></div><div class="shop-service">${tag}</div><div class="shop-metrics"><div><strong>${offerData.action}</strong><small>${small[0]}</small></div><div><strong class="offer-strong">${offerData.display}</strong><small>${offerData.label}<span class="quote-note">${offerData.note}</span></small></div><div><strong>${s.distance}</strong><small>${small[1]}</small></div></div><div class="shop-actions"><button class="secondary" onclick="openChat(${i},false,false)">${secondary}</button><button class="primary" style="margin:0;padding:11px" onclick="openChat(${i},true,false)">${primary}</button></div></div></article>`}).join('')}
 function jsLiteral(text){return String(text||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'")}
 function conversationKeyFor(shopIndex,a){return `${a.report_id}::shop-${shopIndex}`}
 function assessmentFromConversation(c){if(c?.assessment)return c.assessment;if(c?.device&&devices[c.device]){const oldSelected=selected;selected=c.device;const a=buildDemoAssessment();selected=oldSelected;return a}return syncCurrentAssessment()}
@@ -1311,8 +1474,8 @@ window.scheduleShopReply=function(type,text){const key=activeConversationKey,c=c
 window.quickReply=function(type){const c=conversations[activeConversationKey];if(!c)return;addConversationMessage(c,{side:'user',type:'text',text:quickLabel(type),assessment:cloneAssessment(assessmentFromConversation(c)),shop_offer:c.shop_offer});renderChat();renderChatsList();scheduleShopReply(type)}
 window.sendChatMessage=function(){const input=document.getElementById('chatInput'),text=input.value.trim(),c=conversations[activeConversationKey];if(!text){toast(lang==='zh'?'请输入信息':'Type a message first');return}if(!c)return;addConversationMessage(c,{side:'user',type:'text',text,assessment:cloneAssessment(assessmentFromConversation(c)),shop_offer:c.shop_offer});input.value='';renderChat();renderChatsList();scheduleShopReply('message',text)}
 window.messagePreview=function(m){if(!m)return '';if(m.type==='report')return `Shared ReValue report ${m.report_id||m.assessment?.report_id||''}`;return m.text||''}
-window.renderChat=function(){const c=conversations[activeConversationKey]||ensureAssessmentConversation(activeShopIndex,syncCurrentAssessment()),s=shops[c.shopIndex]||shops[0],thread=document.getElementById('chatThread');activeConversationKey=c.conversation_id;activeShopIndex=Number(c.shopIndex)||0;document.getElementById('chatAvatar').src=s.image;document.getElementById('chatShopName').textContent=s.name;document.getElementById('chatShopStatus').textContent=lang==='zh'?'在线 · 通常 1 分钟内回复':'Online · usually replies in 1 min';document.getElementById('chatInput').placeholder=lang==='zh'?'输入信息':'Type a message';document.getElementById('chatCallBtn').textContent=lang==='zh'?'电话':'Call';document.getElementById('chatSendBtn').textContent=lang==='zh'?'发送':'Send';const replies=lang==='zh'?[{key:'book',label:'预约检查'},{key:'price',label:'询问最高报价'},{key:'location',label:'发送位置'}]:[{key:'book',label:'Book inspection'},{key:'price',label:'Ask best price'},{key:'location',label:'Share location'}];document.getElementById('quickReplies').innerHTML=replies.map(x=>`<button type="button" onclick="quickReply('${x.key}')">${x.label}</button>`).join('');let html=(c.messages||[]).length?`<div class="chat-day">${lang==='zh'?'今天':'Today'}</div>`:'';html+=(c.messages||[]).map(m=>{if(m.type==='report')return `<div class="msg user">${reportCardHtmlFromAssessment(m.assessment||assessmentFromConversation(c),m.shop_offer||c.shop_offer,m.time)}</div>`;const avatar=m.side==='shop'?`<img src="${s.image}" alt="${s.name}">`:'';return `<div class="msg ${m.side}">${avatar}<div class="bubble">${escapeHtml(m.text)}<span class="time">${escapeHtml(m.time)}</span></div></div>`}).join('');if(chatTypingShop===activeShopIndex)html+=typingHtml();thread.innerHTML=html;setTimeout(()=>{thread.scrollTop=thread.scrollHeight},0)}
-window.renderChatsList=function(){const el=document.getElementById('chatList');if(!el)return;const rows=Object.keys(conversations).map(k=>Object.assign({key:k},conversations[k])).filter(c=>c&&c.messages&&c.messages.length).sort((a,b)=>(b.updatedAt||0)-(a.updatedAt||0));if(!rows.length){el.innerHTML=`<div class="empty-chats"><b>${lang==='zh'?'还没有聊天':'No shop chats yet'}</b><span>${lang==='zh'?'联系商家或分享报告后，这里会出现聊天。':'Contact a shop or share a report, then the merchant chat will appear here.'}</span><button class="secondary" type="button" onclick="showPage('shops')">${lang==='zh'?'去找商家':'Find shops'}</button></div>`;return}el.innerHTML=rows.map(c=>{const s=shops[c.shopIndex]||shops[0],last=c.messages[c.messages.length-1],a=assessmentFromConversation(c),d=a.device||{};return `<button class="chat-row" type="button" onclick="openConversation('${jsLiteral(c.key)}')"><img class="chat-row-avatar" src="${s.image}" alt="${s.name}"><div class="chat-row-main"><div class="chat-row-title"><b>${s.name}</b><span>${shortDate(c.updatedAt)}</span></div><strong>${escapeHtml(d.device_model||d.model||'Phone report')}</strong><p>${escapeHtml(messagePreview(last))}</p></div><img class="chat-row-thumb" src="${s.image}" alt="${s.name}"></button>`}).join('')}
+window.renderChat=function(){const c=conversations[activeConversationKey]||ensureAssessmentConversation(activeShopIndex,syncCurrentAssessment()),s=shops[c.shopIndex]||shops[0],thread=document.getElementById('chatThread');activeConversationKey=c.conversation_id;activeShopIndex=Number(c.shopIndex)||0;document.getElementById('chatAvatar').src=s.image;document.getElementById('chatShopName').textContent=s.name;document.getElementById('chatShopStatus').textContent=lang==='zh'?'在线 · 通常 1 分钟内回复':'Online · usually replies in 1 min';document.getElementById('chatInput').placeholder=lang==='zh'?'输入信息':'Type a message';document.getElementById('chatCallBtn').textContent=lang==='zh'?'电话':'Call';document.getElementById('chatSendBtn').textContent=lang==='zh'?'发送':'Send';const replies=lang==='zh'?[{key:'book',label:'预约检查'},{key:'price',label:'询问最高报价'},{key:'location',label:'发送位置'}]:[{key:'book',label:'Book inspection'},{key:'price',label:'Ask best price'},{key:'location',label:'Share location'}];document.getElementById('quickReplies').innerHTML=replies.map(x=>`<button type="button" onclick="quickReply('${x.key}')">${x.label}</button>`).join('');let html=(c.messages||[]).length?`<div class="chat-day">${lang==='zh'?'今天':'Today'}</div>`:'';html+=(c.messages||[]).map(m=>{if(m.type==='report')return `<div class="msg user">${reportCardHtmlFromAssessment(m.assessment||assessmentFromConversation(c),m.shop_offer||c.shop_offer,m.time)}</div>`;const avatar=m.side==='shop'?`<img loading="lazy" decoding="async" src="${s.image}" alt="${s.name}">`:'';return `<div class="msg ${m.side}">${avatar}<div class="bubble">${escapeHtml(m.text)}<span class="time">${escapeHtml(m.time)}</span></div></div>`}).join('');if(chatTypingShop===activeShopIndex)html+=typingHtml();thread.innerHTML=html;setTimeout(()=>{thread.scrollTop=thread.scrollHeight},0)}
+window.renderChatsList=function(){const el=document.getElementById('chatList');if(!el)return;const rows=Object.keys(conversations).map(k=>Object.assign({key:k},conversations[k])).filter(c=>c&&c.messages&&c.messages.length).sort((a,b)=>(b.updatedAt||0)-(a.updatedAt||0));if(!rows.length){el.innerHTML=`<div class="empty-chats"><b>${lang==='zh'?'还没有聊天':'No shop chats yet'}</b><span>${lang==='zh'?'联系商家或分享报告后，这里会出现聊天。':'Contact a shop or share a report, then the merchant chat will appear here.'}</span><button class="secondary" type="button" onclick="showPage('shops')">${lang==='zh'?'去找商家':'Find shops'}</button></div>`;return}el.innerHTML=rows.map(c=>{const s=shops[c.shopIndex]||shops[0],last=c.messages[c.messages.length-1],a=assessmentFromConversation(c),d=a.device||{};return `<button class="chat-row" type="button" onclick="openConversation('${jsLiteral(c.key)}')"><img loading="lazy" decoding="async" class="chat-row-avatar" src="${s.image}" alt="${s.name}"><div class="chat-row-main"><div class="chat-row-title"><b>${s.name}</b><span>${shortDate(c.updatedAt)}</span></div><strong>${escapeHtml(d.device_model||d.model||'Phone report')}</strong><p>${escapeHtml(messagePreview(last))}</p></div><img loading="lazy" decoding="async" class="chat-row-thumb" src="${s.image}" alt="${s.name}"></button>`}).join('')}
 window.clearChats=function(){conversations={};activeConversationKey='';chatTypingShop=null;if(chatReplyTimer){clearTimeout(chatReplyTimer);chatReplyTimer=null}try{localStorage.removeItem('revalueAiChats')}catch(e){saveConversations()}renderChatsList();toast(lang==='zh'?'聊天记录已清空':'Chat history cleared')}
 window.renderAssessmentGates=function(){if(finalState.active)return renderFinalGates();return legacy.renderAssessmentGates()}
 window.renderLiveExterior=function(){if(finalState.active){if(finalState.step==='model')renderModelSelection();else if(finalState.step==='storage')renderStorageSelection();else if(finalState.step==='exterior')renderFinalScanner();else showFinalHome();return}return legacy.renderLiveExterior()}
@@ -1327,5 +1490,3 @@ showFinalHome();
 </script>
 </body>
 </html>
-
-

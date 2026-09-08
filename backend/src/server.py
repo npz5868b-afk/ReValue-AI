@@ -1,4 +1,4 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
 import json
 import os
@@ -6,7 +6,7 @@ import secrets
 import sys
 import time
 from dataclasses import asdict
-from http.server import BaseHTTPRequestHandler, HTTPServer
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Any
 from urllib.parse import parse_qs, quote, unquote, urlparse
@@ -214,6 +214,11 @@ class ReValueHandler(BaseHTTPRequestHandler):
         self.send_header("Access-Control-Allow-Origin", "*")
         self.send_header("Access-Control-Allow-Headers", "Content-Type")
         self.send_header("Access-Control-Allow-Methods", "GET,POST,OPTIONS")
+        self.end_headers()
+
+    def do_HEAD(self) -> None:  # noqa: N802
+        self.send_response(200)
+        self.send_header("Content-Type", "text/html; charset=utf-8")
         self.end_headers()
 
     def do_GET(self) -> None:  # noqa: N802
@@ -474,7 +479,7 @@ class ReValueHandler(BaseHTTPRequestHandler):
 
 def run(host: str = "0.0.0.0", port: int = 8765) -> None:
     port = int(os.environ.get("PORT", str(port)))
-    server = HTTPServer((host, port), ReValueHandler)
+    server = ThreadingHTTPServer((host, port), ReValueHandler)
     print(f"ReValue Phase 6A.3 backend listening on http://{host}:{port}")
     server.serve_forever()
 
