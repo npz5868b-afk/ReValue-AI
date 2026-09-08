@@ -13,7 +13,7 @@ from .schemas import DamageType, ImageInput, ViewType, YoloDetection
 YOLO_MODEL_NAME = "revalue_exterior_yolo11n_v0.2"
 DEFAULT_MODEL_PATH = Path(__file__).resolve().parents[1] / "models" / "revalue_exterior_yolo11n_v0.2.pt"
 ULTRALYTICS_CONFIG_DIR = Path(__file__).resolve().parents[2] / "Ultralytics"
-DEFAULT_IMGSZ = 512
+DEFAULT_IMGSZ = 640
 DEFAULT_CONF = 0.25
 RAW_CLASS_NAMES = {
     0: "generic_crack",
@@ -129,9 +129,10 @@ def detect_exterior_damage(
         for image in images:
             path = _write_temp_image(image)
             temp_paths.append(path)
-            results = model.predict(source=str(path), imgsz=imgsz, conf=conf, verbose=False)
-            for result in results:
-                all_detections.extend(_detections_from_result(result, image.view))
+
+        results = model.predict(source=[str(path) for path in temp_paths], imgsz=imgsz, conf=conf, verbose=False, batch=1)
+        for image, result in zip(images, results):
+            all_detections.extend(_detections_from_result(result, image.view))
     finally:
         for path in temp_paths:
             try:
