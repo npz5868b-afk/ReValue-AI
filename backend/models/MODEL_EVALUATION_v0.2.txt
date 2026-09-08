@@ -1,0 +1,42 @@
+ReValue Exterior YOLO11n v0.2
+
+Classes:
+- generic_crack
+- scratch
+
+Held-out Test Set:
+- 173 images
+- 414 annotated instances
+- Overall Precision: 0.495
+- Overall Recall: 0.486
+- Overall mAP50: 0.426
+- Overall mAP50-95: 0.181
+
+generic_crack:
+- Precision: 0.369
+- Recall: 0.230
+- mAP50: 0.215
+- mAP50-95: 0.0915
+
+scratch:
+- Precision: 0.621
+- Recall: 0.743
+- mAP50: 0.637
+- mAP50-95: 0.271
+
+Real clean-phone sanity test:
+Samsung Galaxy S24 Ultra
+4 views tested
+0 damage detections
+
+Positive held-out sanity test:
+- generic crack localized successfully
+- scratch localized successfully
+
+Status:
+SELECTED BASELINE MODEL
+
+Important limitation:
+Generic crack detection remains weaker than scratch detection.
+Gemini remains part of the hybrid exterior assessment for
+ambiguous crack, impact, dent, camera-area and other damage reasoning.

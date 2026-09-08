@@ -1,0 +1,10 @@
+brand,model,status,catalogue_id,canonical_brand,canonical_model,storage_options,source_row_count,detail_url
+Apple,iPhone 13 Pro,found,phone_a565c909e56ae865,Apple,iPhone 13 Pro,128GB|256GB,2,https://www.mobiledokan.com/mobile/apple-iphone-13-pro
+Apple,iPhone 13 Pro Max,found,phone_32c60a363b5b89f9,Apple,iPhone 13 Pro Max,128GB|256GB,2,https://www.mobiledokan.com/mobile/apple-iphone-13-pro-max
+Samsung,Galaxy S22 Ultra,not_found,,,,,,
+Samsung,Galaxy S22 Ultra 5G,found,phone_7349f60a6d6d813f,Samsung,Galaxy S22 Ultra 5G,128GB|256GB,2,https://www.mobiledokan.com/mobile/samsung-galaxy-s22-ultra-5g
+Samsung,Galaxy S23 Ultra,found,phone_8f443a5972543598,Samsung,Galaxy S23 Ultra,256GB|512GB|1TB,3,https://www.mobiledokan.com/mobile/samsung-galaxy-s23-ultra
+Samsung,Galaxy S24,found,phone_63d70a99f96fa405,Samsung,Galaxy S24,128GB|256GB,2,https://www.mobiledokan.com/mobile/samsung-galaxy-s24
+Samsung,Galaxy S24+,found,phone_d9665ad4d61bdab2,Samsung,Galaxy S24 Plus,256GB,1,https://www.mobiledokan.com/mobile/samsung-galaxy-s24-plus
+Samsung,Galaxy S24 Plus,found,phone_d9665ad4d61bdab2,Samsung,Galaxy S24 Plus,256GB,1,https://www.mobiledokan.com/mobile/samsung-galaxy-s24-plus
+Samsung,Galaxy S24 Ultra,found,phone_c8897e4229c30861,Samsung,Galaxy S24 Ultra,256GB|512GB|1TB,3,https://www.mobiledokan.com/mobile/samsung-galaxy-s24-ultra

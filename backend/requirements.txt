@@ -1,0 +1,8 @@
+google-genai
+ultralytics
+torch
+opencv-python
+pillow
+fastapi
+uvicorn
+qrcode
