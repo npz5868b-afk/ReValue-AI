@@ -19,6 +19,7 @@ from .market_evidence import exterior_grade_error_response, normalize_exterior_g
 from .phone_catalogue import confirm_device, get_catalogue_device, search_catalogue
 from .schemas import ImageInput, MergedDamage, YoloDetection
 from .valuation import value_from_market_observations
+from .valuation_explainability import with_valuation_explainability
 
 APP_DIR = Path(__file__).resolve().parents[2] / "app"
 APP_HTML = APP_DIR / "ReValue-AI-Prototype-v1.16.1-predeployment-preview.html"
@@ -433,7 +434,9 @@ class ReValueHandler(BaseHTTPRequestHandler):
                     )
                     fallback["live_retrieval_status"] = market_evidence.get("status")
                     fallback["live_retrieval_error"] = market_evidence.get("error")
-                    _json_response(self, 200, fallback)
+                    _json_response(self, 200, with_valuation_explainability(
+                        fallback, confirmed_device=fallback_device, exterior_grade=str(exterior_grade),
+                    ))
                     return
                 _json_response(
                     self,
@@ -471,7 +474,10 @@ class ReValueHandler(BaseHTTPRequestHandler):
             )
             payload_result = asdict(result)
             payload_result["grounded_sources"] = market_evidence.get("grounded_sources", [])
-            _json_response(self, 200, payload_result)
+            _json_response(self, 200, with_valuation_explainability(
+                payload_result, confirmed_device=query_device, exterior_grade=str(exterior_grade),
+                condition_group=market_evidence.get("condition_group"),
+            ))
             return
 
         _json_response(self, 404, {"error": "not_found"})
