@@ -16,3 +16,7 @@ backend/data/raw/
 app/*.zip
 app/ReValue-AI-Prototype-v1.16.0-final-app-integration-preview.html
 app/ReValue-AI-v1.15.0-live-exterior-preview.png
+.local-run/
+.local-browser-profile/
+.venv/
+docs/assets/*.tmp
