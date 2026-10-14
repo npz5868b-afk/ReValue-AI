@@ -6,3 +6,5 @@ pillow
 fastapi
 uvicorn
 qrcode
+reportlab
+psycopg[binary]

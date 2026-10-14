@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import copy
 import json
 import os
 import secrets
@@ -11,6 +12,7 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import parse_qs, quote, unquote, urlparse
 
+from .decision_engine import DecisionInputError, recommend_next_action
 from .device_identification import identify_device
 from .exterior_analysis import analyze_exterior
 from .grading_rules import grade_from_atomic_damage
@@ -20,6 +22,7 @@ from .phone_catalogue import confirm_device, get_catalogue_device, search_catalo
 from .schemas import ImageInput, MergedDamage, YoloDetection
 from .valuation import value_from_market_observations
 from .valuation_explainability import with_valuation_explainability
+from .report_sharing import ReportStorageUnavailable, check_imei, load_report, report_html, report_pdf, save_report, safe_snapshot
 
 APP_DIR = Path(__file__).resolve().parents[2] / "app"
 APP_HTML = APP_DIR / "ReValue-AI-Prototype-v1.16.1-predeployment-preview.html"
@@ -34,6 +37,26 @@ REMOTE_VIEW_LABELS = {
     "right_side": "Right Side",
 }
 REMOTE_SESSIONS: dict[str, dict[str, Any]] = {}
+
+
+def _decision_payload_with_verified_trade_in_benchmarks(payload: dict[str, Any]) -> dict[str, Any]:
+    """Exclude untrusted trade-in offers from public decision-support requests.
+
+    The current endpoint receives its JSON from a browser. Self-reported flags
+    ("verified", "grounding_verified", "firm", etc.) cannot attest that a merchant
+    actually quoted or guaranteed a price. There is no server-side authenticated
+    merchant-offer provider or trusted signed quote registry in this release.
+
+    Indicative market benchmarks remain intact in the valuation/explainability
+    endpoints, but must *not* become decision-grade "verified trade-in" evidence.
+    A future trusted provider integration may supply server-verified quotes here.
+    """
+    sanitized = copy.deepcopy(payload)
+    valuation = sanitized.get("valuation")
+    if isinstance(valuation, dict):
+        valuation["trade_in_benchmark"] = []
+        valuation.pop("trade_in_benchmarks", None)
+    return sanitized
 
 
 def _json_response(handler: BaseHTTPRequestHandler, status: int, payload: dict[str, Any]) -> None:
@@ -225,6 +248,50 @@ class ReValueHandler(BaseHTTPRequestHandler):
     def do_GET(self) -> None:  # noqa: N802
         parsed = urlparse(self.path)
         path = parsed.path
+        if path.startswith("/reports/"):
+            parts = path.strip("/").split("/")
+            if len(parts) not in {2, 3} or (len(parts) == 3 and parts[2] not in {"qr.svg", "report.pdf"}):
+                _json_response(self, 404, {"error": "not_found"})
+                return
+            token = parts[1]
+            try:
+                snapshot = load_report(token)
+            except ReportStorageUnavailable:
+                _text_response(self, 503, "<h1>Report temporarily unavailable</h1><p>Please try again later.</p>")
+                return
+            if not snapshot:
+                _text_response(self, 404, "<h1>Report not found or expired</h1>")
+                return
+            if len(parts) == 3 and parts[2] == "qr.svg":
+                public_base = os.environ.get("REVALUE_PUBLIC_BASE_URL", "").strip().rstrip("/")
+                if not public_base:
+                    public_base = f"http://127.0.0.1:{os.environ.get('PORT', '8765')}"
+                status, svg, ct = _qr_svg(f"{public_base}/reports/{token}")
+                _text_response(self, status, svg, ct)
+                return
+            if (len(parts) == 3 and parts[2] == "report.pdf") or parse_qs(parsed.query).get("download") == ["pdf"]:
+                binary = report_pdf(snapshot)
+                self.send_response(200)
+                self.send_header("Content-Type", "application/pdf")
+                self.send_header("Content-Disposition", f'attachment; filename="ReValue-Report-{token[:8]}.pdf"')
+                self.send_header("Cache-Control", "private, no-store")
+                self.send_header("X-Content-Type-Options", "nosniff")
+                self.send_header("Content-Length", str(len(binary)))
+                self.end_headers()
+                self.wfile.write(binary)
+                return
+            raw = report_html(snapshot).encode("utf-8")
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html; charset=utf-8")
+            self.send_header("Cache-Control", "private, no-store")
+            self.send_header("X-Content-Type-Options", "nosniff")
+            self.send_header("Referrer-Policy", "no-referrer")
+            self.send_header("X-Robots-Tag", "noindex, nofollow, noarchive")
+            self.send_header("Content-Security-Policy", "default-src 'none'; style-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'")
+            self.send_header("Content-Length", str(len(raw)))
+            self.end_headers()
+            self.wfile.write(raw)
+            return
         if path in {"/", "/app"}:
             if _file_response(self, APP_HTML):
                 return
@@ -278,9 +345,58 @@ class ReValueHandler(BaseHTTPRequestHandler):
         _json_response(self, 404, {"error": "not_found"})
 
     def do_POST(self) -> None:  # noqa: N802
-        payload = self._read_json()
+        try:
+            payload = self._read_json()
+        except (json.JSONDecodeError, UnicodeDecodeError, ValueError):
+            _json_response(
+                self,
+                400,
+                {
+                    "status": "error",
+                    "error": "invalid_json",
+                    "message": "Request body must contain valid JSON.",
+                },
+            )
+            return
         parsed = urlparse(self.path)
         path = parsed.path
+        if path == "/imei/check":
+            _json_response(self, 200, check_imei(payload.get("imei")))
+            return
+        if path == "/reports/export.pdf":
+            try:
+                snapshot = safe_snapshot(payload)
+            except (ValueError, TypeError) as exc:
+                _json_response(self, 400, {"status": "error", "error": str(exc)})
+                return
+            binary = report_pdf(snapshot)
+            self.send_response(200)
+            self.send_header("Content-Type", "application/pdf")
+            self.send_header("Content-Disposition", 'attachment; filename="ReValue-Assessment.pdf"')
+            self.send_header("Cache-Control", "private, no-store")
+            self.send_header("X-Content-Type-Options", "nosniff")
+            self.send_header("Content-Length", str(len(binary)))
+            self.end_headers()
+            self.wfile.write(binary)
+            return
+        if path == "/reports":
+            try:
+                token, expires, _ = save_report(payload)
+            except (ValueError, TypeError) as exc:
+                _json_response(self, 400, {"status": "error", "error": str(exc)})
+                return
+            except ReportStorageUnavailable:
+                _json_response(self, 503, {"status": "error", "error": "report_storage_unavailable", "message": "Sharing is temporarily unavailable. Please try again later."})
+                return
+            public_base = os.environ.get("REVALUE_PUBLIC_BASE_URL", "").strip().rstrip("/")
+            if not public_base:
+                public_base = f"http://127.0.0.1:{os.environ.get('PORT', '8765')}"
+            _json_response(self, 201, {"status": "ok", "share_url": f"{public_base}/reports/{token}",
+                                        "qr_url": f"{public_base}/reports/{token}/qr.svg",
+                                        "pdf_url": f"{public_base}/reports/{token}/report.pdf",
+                                        "expires_at_epoch": expires,
+                                        "cross_device_ready": bool(os.environ.get("REVALUE_PUBLIC_BASE_URL"))})
+            return
         if path == "/remote-session":
             origin = self.headers.get("Origin") or f"http://{self.headers.get('Host', '127.0.0.1:8765')}"
             _json_response(self, 200, _new_session(origin))
@@ -330,6 +446,18 @@ class ReValueHandler(BaseHTTPRequestHandler):
         if self.path == "/identify-device":
             images = [ImageInput(**item) for item in payload.get("images", [])]
             _json_response(self, 200, asdict(identify_device(images)))
+            return
+
+        if self.path == "/decision-support":
+            if not isinstance(payload, dict):
+                _json_response(
+                    self, 400, {"status": "error", "error": "invalid_request_body", "message": "Request body must be a JSON object."},
+                )
+                return
+            try:
+                _json_response(self, 200, recommend_next_action(_decision_payload_with_verified_trade_in_benchmarks(payload)))
+            except DecisionInputError as error:
+                _json_response(self, 400, error.to_response())
             return
 
         if self.path == "/confirm-device":
